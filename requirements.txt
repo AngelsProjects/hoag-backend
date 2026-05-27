@@ -1,0 +1,5 @@
+Technologies:
+Nestjs latest stable version
+nodejs 24
+typescript
+restapi
