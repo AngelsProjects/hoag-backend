@@ -11,12 +11,13 @@ export async function buildTree(
   const normalizedPath = relativePath === '/.' ? '/' : relativePath;
 
   const entries = await fs.promises.readdir(dirPath, { withFileTypes: true });
-  const visible = entries.filter((e) => !e.name.startsWith('.'));
+  const visible = entries.filter(
+    (e) => !e.name.startsWith('.') && (e.isFile() || e.isDirectory()),
+  );
 
   const children = await Promise.all(
     visible.map(async (entry): Promise<TreeNode> => {
       const fullPath = path.join(dirPath, entry.name);
-      const entryRelPath = '/' + path.relative(rootPath, fullPath).replace(/\\/g, '/');
 
       if (entry.isDirectory()) {
         return buildTree(fullPath, rootPath);
@@ -25,7 +26,7 @@ export async function buildTree(
       return {
         name: entry.name,
         type: 'file',
-        path: entryRelPath,
+        path: '/' + path.relative(rootPath, fullPath).replace(/\\/g, '/'),
       };
     }),
   );
