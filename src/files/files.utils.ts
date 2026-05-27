@@ -7,7 +7,8 @@ export async function buildTree(
   rootPath: string,
 ): Promise<TreeNode> {
   const name = path.basename(dirPath);
-  const relativePath = '/' + path.relative(rootPath, dirPath).replace(/\\/g, '/');
+  const relativePath =
+    '/' + path.relative(rootPath, dirPath).replace(/\\/g, '/');
   const normalizedPath = relativePath === '/.' ? '/' : relativePath;
 
   const entries = await fs.promises.readdir(dirPath, { withFileTypes: true });
